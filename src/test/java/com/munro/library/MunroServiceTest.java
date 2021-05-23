@@ -53,84 +53,84 @@ public class MunroServiceTest {
 
     @Test
     public void categoryMunTest() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         params.put(CATEGORY, CATEGORY_MUN);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro4));
     }
 
     @Test
     public void categoryTopTest() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         params.put(CATEGORY, CATEGORY_TOP);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro2, munro3));
     }
 
     @Test
     public void categoryBothTest() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         params.put(CATEGORY, MunroService.CATEGORY_BOTH);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
     }
 
     @Test
     public void emptyCategoryMunrosRemoved_defaultOrder() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         List<Munro> munroResult = munroService.getResult(munroList, params);
         assertEquals(munroResult, Arrays.asList(munro1, munro2, munro3, munro4));
     }
 
     @Test
     public void inNameOrderTest() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         params.put(ORDER_BY_NAME, ASC);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro4, munro3));
     }
 
     @Test
     public void inNameOrderReverseTest() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         params.put(ORDER_BY_NAME, DESC);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3, munro2, munro4, munro1));
     }
 
     @Test
     public void inNameOrderInvalidTest() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         params.put(ORDER_BY_NAME, INVALID);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
     }
 
     @Test
     public void inHeightOrderTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(ORDER_BY_HEIGHT, ASC);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro2, munro4, munro1, munro3));
     }
 
     @Test
     public void inHeightOrderReverseTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(ORDER_BY_HEIGHT, DESC);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3, munro1, munro4, munro2));
     }
 
     @Test
     public void inHeightOrderInvalidTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(ORDER_BY_HEIGHT, INVALID);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
     }
 
     @Test
     public void heightMinTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(MIN_HEIGHT, "1000");
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro3));
     }
 
     @Test
     public void heightMinGreaterThanMaxExceptionTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(MIN_HEIGHT, "1000");
         params.put(MAX_HEIGHT, "10");
         assertThrows(IllegalArgumentException.class, () ->munroService.getResult(munroList, params),
@@ -139,14 +139,14 @@ public class MunroServiceTest {
 
     @Test
     public void heightMaxTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(MAX_HEIGHT, "1000");
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro2,munro4));
     }
 
     @Test
     public void heightMaxArgumentBeforeMinExceptionTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(MAX_HEIGHT, "10");
         params.put(MIN_HEIGHT, "1000");
         assertThrows(IllegalArgumentException.class, () ->munroService.getResult(munroList, params),
@@ -155,16 +155,44 @@ public class MunroServiceTest {
 
     @Test
     public void limitResults() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(LIMIT, "2");
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1,munro2));
     }
 
     @Test
     public void limitResultExceptionTest() {
-        Map<String,String> params = new HashMap<>();
+        Map<String,String> params = new LinkedHashMap<>();
         params.put(LIMIT, "-2");
         assertThrows(IllegalArgumentException.class, () ->munroService.getResult(munroList, params),
                 GREATER_THAN_0);
     }
+
+    @Test
+    public void orderByNameMaxHeightLimit() {
+        Map<String,String> params = new LinkedHashMap<>();
+        params.put(ORDER_BY_NAME, DESC);
+        params.put(MAX_HEIGHT, "1000");
+        params.put(LIMIT, "1");
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro2));
+    }
+
+    @Test
+    public void orderByNameMinHeightLimit() {
+        Map<String,String> params = new LinkedHashMap<>();
+        params.put(ORDER_BY_NAME, DESC);
+        params.put(MIN_HEIGHT, "1000");
+        params.put(LIMIT, "1");
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3));
+    }
+
+    @Test
+    public void orderByHeightCatLimit() {
+        Map<String,String> params = new LinkedHashMap<>();
+        params.put(ORDER_BY_HEIGHT, MunroService.DESC);
+        params.put(CATEGORY, CATEGORY_TOP);
+        params.put(LIMIT, "1");
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3));
+    }
+
 }
