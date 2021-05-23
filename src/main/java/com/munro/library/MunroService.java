@@ -24,6 +24,7 @@ public class MunroService {
     protected static final String CATEGORY_TOP = "TOP";
     protected static final String EMPTY_STRING = "";
     protected static final String SMALLER_THAN_MIN_HEIGHT = "Max Height cannot be smaller than min height";
+    protected static final String GREATER_THAN_0 = "Limit value needs to be greater than 0";
     final Comparator<Munro> byName = new ArgumentComparator<>(on(Munro.class).getName());
     final Comparator<Munro> byHeight = new ArgumentComparator<>(on(Munro.class).getHeightMeters());
 
@@ -45,8 +46,20 @@ public class MunroService {
 
             resultList = filterMaxHeight(params, resultList, key, value);
 
+            resultList = limitResults(resultList, key, value);
+
         }
 
+        return resultList;
+    }
+
+    private List<Munro> limitResults(List<Munro> resultList, String key, String value) {
+        if(key.equals(LIMIT)){
+            int elemNo = Integer.parseInt(value);
+            if (elemNo<0)
+                throw new IllegalArgumentException(GREATER_THAN_0);
+            resultList = resultList.subList(0,elemNo);
+        }
         return resultList;
     }
 
