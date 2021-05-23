@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MunroServiceTest {
 
+    protected static final String INVALID = "Invalid";
     private final List<Munro> munroList = new ArrayList<>();
     private final MunroService munroService = new MunroService();
 
@@ -80,23 +81,45 @@ public class MunroServiceTest {
     @Test
     public void inNameOrderTest() {
         Map<String, String> params = new HashMap<>();
-        params.put(ORDER_BY_NAME, MunroService.ASC);
+        params.put(ORDER_BY_NAME, ASC);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro4, munro3));
     }
 
     @Test
     public void inNameOrderReverseTest() {
         Map<String, String> params = new HashMap<>();
-        params.put(ORDER_BY_NAME, MunroService.DESC);
+        params.put(ORDER_BY_NAME, DESC);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3, munro2, munro4, munro1));
     }
 
     @Test
     public void inNameOrderInvalidTest() {
         Map<String, String> params = new HashMap<>();
-        params.put(ORDER_BY_NAME, "Invalid");
+        params.put(ORDER_BY_NAME, INVALID);
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
     }
+
+    @Test
+    public void inHeightOrderTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(ORDER_BY_HEIGHT, ASC);
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro2, munro4, munro1, munro3));
+    }
+
+    @Test
+    public void inHeightOrderReverseTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(ORDER_BY_HEIGHT, DESC);
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3, munro1, munro4, munro2));
+    }
+
+    @Test
+    public void inHeightOrderInvalidTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(ORDER_BY_HEIGHT, INVALID);
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
+    }
+
 
 
 }

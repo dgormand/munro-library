@@ -22,6 +22,7 @@ public class MunroService {
     protected static final String CATEGORY_TOP = "TOP";
     protected static final String EMPTY_STRING = "";
     final Comparator<Munro> byName = new ArgumentComparator<>(on(Munro.class).getName());
+    final Comparator<Munro> byHeight = new ArgumentComparator<>(on(Munro.class).getHeightMeters());
 
     public List<Munro> getResult(List<Munro> munroList, Map<String,String> params) {
         String key;
@@ -36,14 +37,21 @@ public class MunroService {
                     resultList = select(resultList, having(on(Munro.class).getClassPost1997(), is(value)));
             }
 
-            if(key.equals(ORDER_BY_NAME)){
-                if(ASC.equals(entry.getValue()))
-                    resultList = sort(resultList,on(Munro.class), byName);
-                else if (DESC.equals(entry.getValue()))
-                    resultList = sort(resultList,on(Munro.class), byName.reversed());
-            }
+            resultList = applySort(key, resultList, entry, ORDER_BY_NAME, byName);
+
+            resultList = applySort(key, resultList, entry, ORDER_BY_HEIGHT, byHeight);
         }
 
+        return resultList;
+    }
+
+    private List<Munro> applySort(String key, List<Munro> resultList, Map.Entry<String, String> entry, String fieldName, Comparator<Munro> comparator) {
+        if (key.equals(fieldName)) {
+            if (ASC.equals(entry.getValue()))
+                resultList = sort(resultList, on(Munro.class), comparator);
+            else if (DESC.equals(entry.getValue()))
+                resultList = sort(resultList, on(Munro.class), comparator.reversed());
+        }
         return resultList;
     }
 }
