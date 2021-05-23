@@ -9,6 +9,7 @@ import java.util.*;
 
 import static com.munro.library.MunroService.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -120,6 +121,21 @@ public class MunroServiceTest {
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
     }
 
+    @Test
+    public void heightMinTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(MIN_HEIGHT, "1000");
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro3));
+    }
+
+    @Test
+    public void heightMinGreaterThanMaxExceptionTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(MIN_HEIGHT, "1000");
+        params.put(MAX_HEIGHT, "10");
+        assertThrows(IllegalArgumentException.class, () ->munroService.getResult(munroList, params),
+                SMALLER_THAN_MIN_HEIGHT);
+    }
 
 
 }
