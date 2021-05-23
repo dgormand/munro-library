@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.munro.library.entity.Munro;
+import com.munro.library.entity.MunroEnum;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -34,7 +36,6 @@ public class DataLoader implements CommandLineRunner {
 
             InputStreamReader in = new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1);
             MappingIterator<Munro> readValues = mapper.readerFor(Munro.class).with(bootstrapSchema).readValues(in);
-
 
             return readValues.readAll();
 

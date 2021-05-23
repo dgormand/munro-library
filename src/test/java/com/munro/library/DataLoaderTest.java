@@ -1,5 +1,6 @@
 package com.munro.library;
 
+import com.munro.library.entity.Munro;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

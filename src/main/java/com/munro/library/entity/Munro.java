@@ -1,4 +1,4 @@
-package com.munro.library;
+package com.munro.library.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

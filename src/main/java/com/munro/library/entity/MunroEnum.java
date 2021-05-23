@@ -1,4 +1,4 @@
-package com.munro.library;
+package com.munro.library.entity;
 
 import java.util.List;
 
