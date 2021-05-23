@@ -20,7 +20,9 @@ import java.util.List;
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    public Collection<Munro> loadData(String fileName) {
+    private static final String EMPTY_STRING = "";
+
+    private Collection<Munro> parseCsv(String fileName) {
         try {
             CsvSchema bootstrapSchema = CsvSchema.emptySchema().withHeader();
             CsvMapper mapper = new CsvMapper();
@@ -33,7 +35,9 @@ public class DataLoader implements CommandLineRunner {
             InputStreamReader in = new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1);
             MappingIterator<Munro> readValues = mapper.readerFor(Munro.class).with(bootstrapSchema).readValues(in);
 
+
             return readValues.readAll();
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,13 +45,18 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
+    public Collection<Munro> loadData(String fileName) {
+        List<Munro> munroList = new ArrayList<>(parseCsv(fileName));
+        munroList.removeIf(munro -> EMPTY_STRING.equals(munro.getName()));
+
+        return munroList;
+    }
+
     @Override
     public void run(String... args) {
         MunroEnum munroEnum = MunroEnum.INSTANCE;
 
         List<Munro> munroList = new ArrayList<>(loadData("csvData/munrotab_v6.2.csv"));
-        munroList.removeIf(munro -> munro.getName().equals(""));
-
         munroEnum.setMunroList(munroList);
     }
 }

@@ -36,7 +36,7 @@ public class Munro {
     private String rhbSection;
 
     @JsonProperty("_Section")
-    private String _section;
+    private String section;
 
     @JsonProperty("Height (m)")
     private Double heightMeters;

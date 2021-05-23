@@ -34,10 +34,11 @@ public class DataLoaderTest {
 
     @Test
     public void checkIfLastRowIsCorrect() {
-        Munro last = munroList.get(munroList.size() - 1);
+        Munro last = munroList.get(9);
         assertThat(last.getName(), is("Cruach Ardrain SW Top"));
         assertThat(last.getHeightMeters(), is(Double.parseDouble("1044.9")));
         assertThat(last.getClassPost1997(), is(""));
         assertThat(last.getGridRef(), is("NN408211"));
     }
+
 }
