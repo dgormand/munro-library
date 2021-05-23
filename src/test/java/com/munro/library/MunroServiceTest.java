@@ -70,4 +70,33 @@ public class MunroServiceTest {
         assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
     }
 
+    @Test
+    public void emptyCategoryMunrosRemoved_defaultOrder() {
+        Map<String, String> params = new HashMap<>();
+        List<Munro> munroResult = munroService.getResult(munroList, params);
+        assertEquals(munroResult, Arrays.asList(munro1, munro2, munro3, munro4));
+    }
+
+    @Test
+    public void inNameOrderTest() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ORDER_BY_NAME, MunroService.ASC);
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro4, munro3));
+    }
+
+    @Test
+    public void inNameOrderReverseTest() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ORDER_BY_NAME, MunroService.DESC);
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro3, munro2, munro4, munro1));
+    }
+
+    @Test
+    public void inNameOrderInvalidTest() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ORDER_BY_NAME, "Invalid");
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro1, munro2, munro3, munro4));
+    }
+
+
 }

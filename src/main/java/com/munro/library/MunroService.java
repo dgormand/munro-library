@@ -1,10 +1,9 @@
 package com.munro.library;
 
+import ch.lambdaj.function.compare.ArgumentComparator;
 import com.munro.library.entity.Munro;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.*;
 import static org.hamcrest.Matchers.is;
@@ -22,6 +21,7 @@ public class MunroService {
     protected static final String MAX_HEIGHT = "maxHeight";
     protected static final String CATEGORY_TOP = "TOP";
     protected static final String EMPTY_STRING = "";
+    final Comparator<Munro> byName = new ArgumentComparator<>(on(Munro.class).getName());
 
     public List<Munro> getResult(List<Munro> munroList, Map<String,String> params) {
         String key;
@@ -33,7 +33,14 @@ public class MunroService {
             if(key.equals(CATEGORY)){
                 String value = entry.getValue();
                 if (!value.equals(CATEGORY_BOTH))
-                    resultList = select(munroList, having(on(Munro.class).getClassPost1997(), is(value)));
+                    resultList = select(resultList, having(on(Munro.class).getClassPost1997(), is(value)));
+            }
+
+            if(key.equals(ORDER_BY_NAME)){
+                if(ASC.equals(entry.getValue()))
+                    resultList = sort(resultList,on(Munro.class), byName);
+                else if (DESC.equals(entry.getValue()))
+                    resultList = sort(resultList,on(Munro.class), byName.reversed());
             }
         }
 
