@@ -2,7 +2,7 @@ package com.munro.library;
 
 import java.util.List;
 
-public enum MunroListEnum {
+public enum MunroEnum {
     INSTANCE;
 
     List<Munro> munroList;

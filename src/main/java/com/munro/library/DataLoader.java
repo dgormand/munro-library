@@ -12,8 +12,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -40,7 +42,12 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        loadData("csvData/munrotab_v6.2.csv");
+    public void run(String... args) {
+        MunroEnum munroEnum = MunroEnum.INSTANCE;
+
+        List<Munro> munroList = new ArrayList<>(loadData("csvData/munrotab_v6.2.csv"));
+        munroList.removeIf(munro -> munro.getName().equals(""));
+
+        munroEnum.setMunroList(munroList);
     }
 }
