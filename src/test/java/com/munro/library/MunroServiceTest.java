@@ -137,5 +137,20 @@ public class MunroServiceTest {
                 SMALLER_THAN_MIN_HEIGHT);
     }
 
+    @Test
+    public void heightMaxTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(MAX_HEIGHT, "1000");
+        assertEquals(munroService.getResult(munroList, params), Arrays.asList(munro2,munro4));
+    }
+
+    @Test
+    public void heightMaxArgumentBeforeMinExceptionTest() {
+        Map<String,String> params = new HashMap<>();
+        params.put(MAX_HEIGHT, "10");
+        params.put(MIN_HEIGHT, "1000");
+        assertThrows(IllegalArgumentException.class, () ->munroService.getResult(munroList, params),
+                SMALLER_THAN_MIN_HEIGHT);
+    }
 
 }

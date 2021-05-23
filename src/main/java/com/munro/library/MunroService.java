@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class MunroService {
     protected static final String DESC = "DESC";
@@ -42,11 +41,29 @@ public class MunroService {
 
             resultList = applySort(key, resultList, entry, ORDER_BY_HEIGHT, byHeight);
 
-            resultList = filterHeight(params, resultList, key, value);
+            resultList = filterMinHeight(params, resultList, key, value);
+
+            resultList = filterMaxHeight(params, resultList, key, value);
 
         }
 
         return resultList;
+    }
+
+    private List<Munro> filterMaxHeight(Map<String, String> params, List<Munro> resultList, String key, String value) {
+        if (key.equals(MAX_HEIGHT)) {
+            String minVal = params.get(MIN_HEIGHT);
+            validateHeightParameters(value, minVal);
+            resultList = select(resultList, having(on(Munro.class).getHeightMeters(),
+                    lessThanOrEqualTo(Double.parseDouble(value))));
+        }
+        return resultList;
+    }
+
+    private void validateHeightParameters(String maxValue, String minVal) {
+        if (minVal != null && maxValue != null && Double.parseDouble(minVal) > Double.parseDouble(maxValue)) {
+            throw new IllegalArgumentException(SMALLER_THAN_MIN_HEIGHT);
+        }
     }
 
     private List<Munro> filterCategory(List<Munro> resultList, String key, String value) {
@@ -57,12 +74,10 @@ public class MunroService {
         return resultList;
     }
 
-    private List<Munro> filterHeight(Map<String, String> params, List<Munro> resultList, String key, String value) {
+    private List<Munro> filterMinHeight(Map<String, String> params, List<Munro> resultList, String key, String value) {
         if (key.equals(MIN_HEIGHT)) {
             String maxVal = params.get(MAX_HEIGHT);
-            if (maxVal != null && Double.parseDouble(maxVal) < Double.parseDouble(value)) {
-                throw new IllegalArgumentException(SMALLER_THAN_MIN_HEIGHT);
-            }
+            validateHeightParameters(maxVal, value);
             resultList = select(resultList, having(on(Munro.class).getHeightMeters(),
                     greaterThanOrEqualTo(Double.parseDouble(value))));
         }
