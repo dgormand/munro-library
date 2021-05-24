@@ -23,7 +23,7 @@ public class MunroService {
     protected static final String MAX_HEIGHT = "maxHeight";
     protected static final String CATEGORY_TOP = "TOP";
     protected static final String EMPTY_STRING = "";
-    protected static final String SMALLER_THAN_MIN_HEIGHT = "Max Height cannot be smaller than min height";
+    protected static final String SMALLER_THAN_MIN_HEIGHT = "Max height cannot be smaller than min height";
     protected static final String GREATER_THAN_0 = "Limit value needs to be greater than 0";
     final Comparator<Munro> byName = new ArgumentComparator<>(on(Munro.class).getName());
     final Comparator<Munro> byHeight = new ArgumentComparator<>(on(Munro.class).getHeightMeters());
