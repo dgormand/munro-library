@@ -3,7 +3,9 @@ package com.munro.library;
 import com.munro.library.entity.Munro;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class DataLoaderTest {
     @BeforeAll
     public static void setup() {
         DataLoader dataLoader = new DataLoader();
+        ReflectionTestUtils.setField(dataLoader, "charset", StandardCharsets.ISO_8859_1.toString());
         munroList = new ArrayList<>(dataLoader.loadData("csvData/munrotab_v6.2.csv"));
     }
 

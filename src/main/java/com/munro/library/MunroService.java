@@ -54,11 +54,11 @@ public class MunroService {
     }
 
     private List<Munro> limitResults(List<Munro> resultList, String key, String value) {
-        if(key.equals(LIMIT)){
+        if (key.equals(LIMIT)) {
             int elemNo = Integer.parseInt(value);
-            if (elemNo<0)
+            if (elemNo < 0)
                 throw new IllegalArgumentException(GREATER_THAN_0);
-            resultList = resultList.subList(0,elemNo);
+            resultList = resultList.subList(0, elemNo);
         }
         return resultList;
     }

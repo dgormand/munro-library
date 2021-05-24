@@ -24,7 +24,6 @@ dependencies {
 	implementation group: 'com.googlecode.lambdaj', name: 'lambdaj', version: '2.3.3'
 	testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 	testImplementation 'io.rest-assured:rest-assured:4.4.0'
-
 }
 
 test {

@@ -22,13 +22,13 @@ public class MunroController {
         MunroService munroService = new MunroService();
         Gson gson = new Gson();
 
-        try{
+        try {
             return new ResponseEntity<>(gson.toJson(munroService.getResult(MunroEnum.INSTANCE.getMunroList(), allParams)),
                     httpHeaders, HttpStatus.OK);
-        }catch (IllegalArgumentException e){
-            return new ResponseEntity<>(gson.toJson(e.getMessage()),httpHeaders, HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
-            return new ResponseEntity<>(gson.toJson(e.getMessage()),httpHeaders, HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(gson.toJson(e.getMessage()), httpHeaders, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(gson.toJson(e.getMessage()), httpHeaders, HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 }

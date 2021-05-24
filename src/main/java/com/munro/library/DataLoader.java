@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.munro.library.entity.Munro;
 import com.munro.library.entity.MunroEnum;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +23,10 @@ import java.util.List;
 public class DataLoader implements CommandLineRunner {
 
     private static final String EMPTY_STRING = "";
+    @Value("${file.filename}")
+    private String filename;
+    @Value("${file.charset}")
+    private String charset;
 
     private Collection<Munro> parseCsv(String fileName) {
         try {
@@ -34,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
             mapper.enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE);
             File file = new ClassPathResource(fileName).getFile();
 
-            InputStreamReader in = new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1);
+            InputStreamReader in = new InputStreamReader(new FileInputStream(file), charset);
             MappingIterator<Munro> readValues = mapper.readerFor(Munro.class).with(bootstrapSchema).readValues(in);
 
             return readValues.readAll();
@@ -57,7 +61,7 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) {
         MunroEnum munroEnum = MunroEnum.INSTANCE;
 
-        List<Munro> munroList = new ArrayList<>(loadData("csvData/munrotab_v6.2.csv"));
+        List<Munro> munroList = new ArrayList<>(loadData(filename));
         munroEnum.setMunroList(munroList);
     }
 }
