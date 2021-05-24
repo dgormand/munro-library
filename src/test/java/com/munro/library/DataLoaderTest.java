@@ -16,7 +16,7 @@ public class DataLoaderTest {
     @BeforeAll
     public static void setup() {
         DataLoader dataLoader = new DataLoader();
-        munroList = new ArrayList<>(dataLoader.loadData("csvData/munrotab.csv"));
+        munroList = new ArrayList<>(dataLoader.loadData("csvData/munrotab_v6.2.csv"));
     }
 
     @Test

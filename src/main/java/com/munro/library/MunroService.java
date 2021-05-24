@@ -82,7 +82,7 @@ public class MunroService {
     private List<Munro> filterCategory(List<Munro> resultList, String key, String value) {
         if (key.equals(CATEGORY)) {
             if (!value.equals(CATEGORY_BOTH))
-                resultList = select(resultList, having(on(Munro.class).getClassPost1997(), is(value)));
+                resultList = select(resultList, having(on(Munro.class).getClassPost1997(), is(value.toUpperCase())));
         }
         return resultList;
     }
@@ -99,9 +99,9 @@ public class MunroService {
 
     private List<Munro> applySort(String key, List<Munro> resultList, Map.Entry<String, String> entry, String fieldName, Comparator<Munro> comparator) {
         if (key.equals(fieldName)) {
-            if (ASC.equals(entry.getValue()))
+            if (ASC.equals(entry.getValue().toUpperCase()))
                 resultList = sort(resultList, on(Munro.class), comparator);
-            else if (DESC.equals(entry.getValue()))
+            else if (DESC.equals(entry.getValue().toUpperCase()))
                 resultList = sort(resultList, on(Munro.class), comparator.reversed());
         }
         return resultList;

@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 @RestController
 public class MunroController {
 
-    @GetMapping("/")
+    @GetMapping("/api/search")
     public ResponseEntity<String> search(@RequestParam LinkedHashMap<String, String> allParams) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);

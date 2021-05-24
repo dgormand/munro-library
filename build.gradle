@@ -20,9 +20,10 @@ dependencies {
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
-	compileOnly group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 	implementation group: 'org.springframework', name: 'spring-web', version: '5.3.7'
-	implementation (group: 'com.googlecode.lambdaj', name: 'lambdaj', version: '2.3.3')
+	implementation group: 'com.googlecode.lambdaj', name: 'lambdaj', version: '2.3.3'
+	testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+	testImplementation 'io.rest-assured:rest-assured:4.4.0'
 
 }
 
