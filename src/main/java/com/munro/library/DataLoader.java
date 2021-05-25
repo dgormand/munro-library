@@ -8,6 +8,7 @@ import com.munro.library.entity.Munro;
 import com.munro.library.entity.MunroEnum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -36,9 +37,8 @@ public class DataLoader implements CommandLineRunner {
             mapper.enable(CsvParser.Feature.INSERT_NULLS_FOR_MISSING_COLUMNS);
             mapper.enable(CsvParser.Feature.SKIP_EMPTY_LINES);
             mapper.enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE);
-            File file = new ClassPathResource(fileName).getFile();
 
-            InputStreamReader in = new InputStreamReader(new FileInputStream(file), charset);
+            InputStreamReader in = new InputStreamReader(getClass().getResourceAsStream(fileName), charset);
             MappingIterator<Munro> readValues = mapper.readerFor(Munro.class).with(bootstrapSchema).readValues(in);
 
             return readValues.readAll();

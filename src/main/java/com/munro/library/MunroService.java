@@ -25,6 +25,8 @@ public class MunroService {
     protected static final String EMPTY_STRING = "";
     protected static final String SMALLER_THAN_MIN_HEIGHT = "Max height cannot be smaller than min height";
     protected static final String GREATER_THAN_0 = "Limit value needs to be greater than 0";
+    protected static final String LIMIT_NEEDS_TO_BE_A_NUMBER = "Limit needs to be a number";
+    protected static final String HEIGHT_NEEDS_TO_BE_NUMBER = "Height needs to be number";
     final Comparator<Munro> byName = new ArgumentComparator<>(on(Munro.class).getName());
     final Comparator<Munro> byHeight = new ArgumentComparator<>(on(Munro.class).getHeightMeters());
 
@@ -55,8 +57,13 @@ public class MunroService {
 
     private List<Munro> limitResults(List<Munro> resultList, String key, String value) {
         if (key.equals(LIMIT)) {
-            int elemNo = Integer.parseInt(value);
-            if (elemNo < 0)
+            int elemNo;
+            try {
+                elemNo = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException(LIMIT_NEEDS_TO_BE_A_NUMBER);
+            }
+            if (elemNo <= 0)
                 throw new IllegalArgumentException(GREATER_THAN_0);
             resultList = resultList.subList(0, elemNo);
         }
@@ -73,8 +80,16 @@ public class MunroService {
         return resultList;
     }
 
-    private void validateHeightParameters(String maxValue, String minVal) {
-        if (minVal != null && maxValue != null && Double.parseDouble(minVal) > Double.parseDouble(maxValue)) {
+    private void validateHeightParameters(String maxValue, String minValue) {
+        Double min;
+        Double max;
+        try {
+            min = minValue !=null ? Double.parseDouble(minValue): null;
+            max = maxValue !=null ? Double.parseDouble(maxValue): null;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(HEIGHT_NEEDS_TO_BE_NUMBER);
+        }
+        if (min != null && max != null && min > max) {
             throw new IllegalArgumentException(SMALLER_THAN_MIN_HEIGHT);
         }
     }
@@ -99,9 +114,10 @@ public class MunroService {
 
     private List<Munro> applySort(String key, List<Munro> resultList, Map.Entry<String, String> entry, String fieldName, Comparator<Munro> comparator) {
         if (key.equals(fieldName)) {
-            if (ASC.equals(entry.getValue().toUpperCase()))
+            String value = entry.getValue()==null ? ASC :  entry.getValue();
+            if (ASC.equals(value.toUpperCase()))
                 resultList = sort(resultList, on(Munro.class), comparator);
-            else if (DESC.equals(entry.getValue().toUpperCase()))
+            else if (DESC.equals(value.toUpperCase()))
                 resultList = sort(resultList, on(Munro.class), comparator.reversed());
         }
         return resultList;
